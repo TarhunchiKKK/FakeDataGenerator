@@ -1,5 +1,5 @@
 import { Faker, fakerDE, fakerEN_US, fakerFR, fakerRU } from "@faker-js/faker";
-import { LocalesCodes } from "../shared";
+import { LocalesCodes } from "../enums/locales-codes.enum";
 
 const localesFakersMap: Record<LocalesCodes, Faker> = {
     [LocalesCodes.Russia]: fakerRU,
@@ -16,7 +16,25 @@ export class PersonCreator {
         this.faker.seed(seed);
     }
 
-    createPerson(): string {
+    private createId() {
+        return this.faker.string.alphanumeric({ length: 15 });
+    }
+
+    private createName() {
+        const firstName = this.faker.person.firstName();
+        const lastName = this.faker.person.lastName();
+        return `${firstName} ${lastName}`;
+    }
+
+    private createPhone() {
         return this.faker.phone.number({ style: "international" });
+    }
+
+    public createPerson() {
+        return {
+            id: this.createId(),
+            name: this.createName(),
+            phone: this.createPhone(),
+        };
     }
 }
