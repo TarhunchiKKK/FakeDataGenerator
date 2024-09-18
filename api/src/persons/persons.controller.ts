@@ -7,6 +7,6 @@ export class PersonsController {
 
     @Get()
     generatePersons(@Query("seed") seed: number) {
-        return this.personsService.generatePersons(+seed);
+        return this.personsService.generatePersons(+seed, 3.5);
     }
 }
