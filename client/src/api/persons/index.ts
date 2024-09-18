@@ -1,0 +1,1 @@
+export { personsApi } from "./api";
