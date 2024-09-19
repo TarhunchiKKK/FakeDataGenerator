@@ -4,14 +4,17 @@ import { RangeInput, RandomizedInput } from "../../components";
 import { maxErrorsCount, maxSeed, minErrorsCount, minSeed } from "../../constants";
 import { generateSeed } from "../../helpers";
 import { IPerson } from "../../interfaces";
+import { personsPerPage, scrollThreshold } from "./constants";
 import { useControls } from "./hooks";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export function HomePage() {
     const { errorsCount, handleErrorsCountChange, seed, handleSeedChange } = useControls();
 
-    const { persons } = personsApi.useGetPersons({
+    const { persons, onScroll } = personsApi.useGetPersons({
         seed,
         errorsCount,
+        count: personsPerPage,
     });
 
     const renderPerson = (person: IPerson, index: number) => (
@@ -32,7 +35,7 @@ export function HomePage() {
 
                     <RandomizedInput
                         label="Seed:"
-                        value={seed}
+                        value={seed.toString()}
                         onChange={handleSeedChange}
                         minValue={minSeed}
                         maxValue={maxSeed}
@@ -40,7 +43,17 @@ export function HomePage() {
                     />
                 </div>
 
-                {persons.length && <PersonsTable persons={persons} renderPerson={renderPerson} />}
+                {persons.length && (
+                    <InfiniteScroll
+                        dataLength={persons.length}
+                        next={onScroll}
+                        hasMore={true}
+                        loader={<p>Loading...</p>}
+                        scrollThreshold={scrollThreshold}
+                    >
+                        <PersonsTable persons={persons} renderPerson={renderPerson} />
+                    </InfiniteScroll>
+                )}
             </div>
         </main>
     );

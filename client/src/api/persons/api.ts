@@ -1,6 +1,5 @@
-import { useGetPersons, useLazyGetPersons } from "./hooks";
+import { useGetPersons } from "./hooks";
 
 export const personsApi = {
     useGetPersons,
-    useLazyGetPersons,
 };
