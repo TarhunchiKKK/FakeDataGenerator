@@ -6,7 +6,7 @@ export class PersonsController {
     constructor(private readonly personsService: PersonsService) {}
 
     @Get()
-    generatePersons(@Query("seed") seed: number) {
-        return this.personsService.generatePersons(+seed, 3.5);
+    public generatePersons(@Query("seed") seed: number, @Query("errors") errorsCount: number) {
+        return this.personsService.generatePersons(+seed, +errorsCount);
     }
 }
