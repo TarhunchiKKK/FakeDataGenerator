@@ -14,7 +14,10 @@ export function RandomizedInput({
     const [textInputValue, setTextInputValue] = useState<string>(value.toString());
 
     const handleTextInputValueChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const validatedValue = validateNumericString(e.target.value, "0", { minValue, maxValue });
+        const validatedValue = validateNumericString(e.target.value ?? "0", {
+            minValue,
+            maxValue,
+        });
         onChange(+validatedValue);
         setTextInputValue(validatedValue);
     };

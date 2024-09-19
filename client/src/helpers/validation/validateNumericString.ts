@@ -1,12 +1,15 @@
-const numericSymbolsRegexp = /\D/g;
+const availableChars = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
 
 export function validateNumericString(
     value: string,
-    defaultValue: string,
     options: { minValue: number; maxValue: number },
 ) {
-    value = value ?? defaultValue;
-    const numericValue = value.replace(numericSymbolsRegexp, "");
+    // const numericValue = value.replace(validationRegexp, "");
+    const numericValue = value
+        .split("")
+        .filter((char) => availableChars.includes(char))
+        .join("");
+
     let validatedValue = +numericValue;
     if (options.maxValue) {
         validatedValue = Math.min(validatedValue, options.maxValue);

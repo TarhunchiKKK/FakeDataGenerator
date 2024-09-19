@@ -5,16 +5,14 @@ import { validateNumericString } from "../../../helpers";
 export function RangeInput({ label, value, onChange, minValue, maxValue }: IRangeInputProps) {
     const [textInputValue, setTextInputValue] = useState<string>(value.toString());
 
-    const handleTextInputValueChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const validatedValue = validateNumericString(e.target.value, "0", { minValue, maxValue });
+    const handleValueChanged = (e: ChangeEvent<HTMLInputElement>) => {
+        console.log(e.target.value);
+        const validatedValue = validateNumericString(e.target.value ?? "0", {
+            minValue,
+            maxValue,
+        });
         onChange(+validatedValue);
         setTextInputValue(validatedValue);
-    };
-
-    const handleRangeValueChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        onChange(+value);
-        setTextInputValue(value);
     };
 
     return (
@@ -26,14 +24,15 @@ export function RangeInput({ label, value, onChange, minValue, maxValue }: IRang
                 min={minValue}
                 max={maxValue}
                 value={value}
-                onChange={handleRangeValueChange}
+                onChange={handleValueChanged}
             />
 
             <input
-                type="text"
                 className="px-2 border-2 border-slate-600 outline-none rounded-md max-w-20"
+                type="number"
+                step={0.5}
                 value={textInputValue}
-                onChange={handleTextInputValueChange}
+                onChange={handleValueChanged}
             />
         </div>
     );
