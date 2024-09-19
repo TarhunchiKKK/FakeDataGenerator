@@ -36,7 +36,6 @@ export class PersonsDistorter {
 
     public static distortPerson(person: Person, errorsPerRecord: number): void {
         errorsPerRecord = this.determineErrorsCount(errorsPerRecord);
-        console.log(errorsPerRecord);
 
         for (let i = 0; i < errorsPerRecord; i++) {
             this.distortPersonOnce(person);

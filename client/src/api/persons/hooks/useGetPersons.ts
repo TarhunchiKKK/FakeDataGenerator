@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { IPerson } from "../../../interfaces";
-import { TGetPersonsResponse } from "../types";
+import { TGetPersonsQueryArgs, TGetPersonsResponse } from "../types";
 
-const seed = 15;
-
-export function useGetPersons() {
+export function useGetPersons(queryArgs: TGetPersonsQueryArgs) {
     const [persons, setPersons] = useState<IPerson[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isError, setIsError] = useState<boolean>(false);
@@ -20,7 +18,8 @@ export function useGetPersons() {
                     `${import.meta.env.VITE_SERVER_URL}/persons`,
                     {
                         params: {
-                            seed,
+                            seed: queryArgs.seed,
+                            errors: queryArgs.errorsCount,
                         },
                     },
                 );
@@ -34,7 +33,7 @@ export function useGetPersons() {
         }
 
         fetchPersons();
-    }, []);
+    }, [queryArgs.seed, queryArgs.errorsCount]);
 
     return { persons, isLoading, isError };
 }
