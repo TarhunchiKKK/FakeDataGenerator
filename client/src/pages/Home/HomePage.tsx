@@ -1,14 +1,13 @@
 import { personsApi } from "../../api";
 import { PersonsTable, PersonTableRow } from "../../components";
-import { RangeInput } from "../../components/Inputs";
-import { maxErrorsCount, minErrorsCount } from "../../constants";
+import { RangeInput, RandomizedInput } from "../../components";
+import { maxErrorsCount, maxSeed, minErrorsCount, minSeed } from "../../constants";
+import { generateSeed } from "../../helpers";
 import { IPerson } from "../../interfaces";
 import { useControls } from "./hooks";
 
-const seed = 15;
-
 export function HomePage() {
-    const { errorsCount, handleErrorsCountChange } = useControls();
+    const { errorsCount, handleErrorsCountChange, seed, handleSeedChange } = useControls();
 
     const { persons } = personsApi.useGetPersons({
         seed,
@@ -21,13 +20,23 @@ export function HomePage() {
 
     return (
         <main className="py-4 px-4 md:px-0">
-            <div className="container mx-auto flex flex-col items-center">
-                <div className="flex flex-row justify-between items-center mb-10">
+            <div className="container mx-auto">
+                <div className="w-full flex flex-row justify-between items-center mb-10">
                     <RangeInput
+                        label="Errors:"
                         value={errorsCount}
                         onChange={handleErrorsCountChange}
                         minValue={minErrorsCount}
                         maxValue={maxErrorsCount}
+                    />
+
+                    <RandomizedInput
+                        label="Seed:"
+                        value={seed}
+                        onChange={handleSeedChange}
+                        minValue={minSeed}
+                        maxValue={maxSeed}
+                        ganerateValue={generateSeed}
                     />
                 </div>
 

@@ -1,0 +1,1 @@
+export { generateSeed } from "./generateSeed";

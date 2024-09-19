@@ -1,11 +1,13 @@
-export interface IRangeInputProps {
+export interface IRandomizedInputProps {
     label: string;
 
-    value: number;
+    value: string;
 
     onChange: (value: number) => void;
 
     minValue: number;
 
     maxValue: number;
+
+    ganerateValue: () => number;
 }

@@ -2,7 +2,7 @@ import { IPersonsTableProps } from "./props";
 
 export function PersonsTable({ persons, renderPerson }: IPersonsTableProps) {
     return (
-        <table className="w-max min-w-[1024px]">
+        <table className="min-w-[1024px] lg:w-full">
             <thead>
                 <tr>
                     <th className="text-left">Number</th>
