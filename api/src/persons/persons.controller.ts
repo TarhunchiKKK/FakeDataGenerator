@@ -1,5 +1,6 @@
-import { Controller, Get, Param, Query } from "@nestjs/common";
+import { Controller, Get, Query } from "@nestjs/common";
 import { PersonsService } from "./persons.service";
+import { LocalesCodes } from "./enums/locales-codes.enum";
 
 @Controller("persons")
 export class PersonsController {
@@ -10,7 +11,13 @@ export class PersonsController {
         @Query("seed") seed: number,
         @Query("errors") errorsCount: number,
         @Query("count") count: number,
+        @Query("locale") locale: LocalesCodes,
     ) {
-        return this.personsService.generatePersons(+seed, +errorsCount, +count);
+        return this.personsService.generatePersons(+seed, +errorsCount, +count, locale);
+    }
+
+    @Get("/localizations")
+    public getLocalizations() {
+        return this.personsService.getLcales();
     }
 }

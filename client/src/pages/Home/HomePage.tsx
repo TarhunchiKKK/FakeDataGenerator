@@ -1,32 +1,34 @@
 import { personsApi } from "../../api";
-import { Loader, PersonsTable, PersonTableRow } from "../../components";
-import { RangeInput, RandomizedInput } from "../../components";
+import { RangeInput, RandomizedInput, Dropdown, Loader, PersonsTable } from "../../components";
 import { maxErrorsCount, maxSeed, minErrorsCount, minSeed } from "../../constants";
 import { generateSeed } from "../../helpers";
-import { IPerson } from "../../interfaces";
 import { scrollThreshold } from "./constants";
-import { useControls } from "./hooks";
+import { renderPerson } from "./helpers";
+import { useErrorsCountControl, useLocaleControl, useSeedControl } from "./hooks";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 export function HomePage() {
-    const {
-        errorsCount,
-        debouncedErrorsCount,
-        handleErrorsCountChange,
+    const { seed, debouncedSeed, handleSeedChange } = useSeedControl();
+    const { errorsCount, debouncedErrorsCount, handleErrorsCountChange } = useErrorsCountControl();
+    const { locale, debouncedLocale, handleLocaleChange, localesPairs } = useLocaleControl();
+
+    const { persons, onScroll } = personsApi.useGetPersons(
         debouncedSeed,
-        handleSeedChange,
-    } = useControls();
-
-    const { persons, onScroll } = personsApi.useGetPersons(debouncedSeed, debouncedErrorsCount);
-
-    const renderPerson = (person: IPerson, index: number) => (
-        <PersonTableRow key={person.id} person={person} sequenceNumber={index + 1} />
+        debouncedErrorsCount,
+        debouncedLocale,
     );
 
     return (
         <main className="py-4 px-4 md:px-0">
             <div className="container mx-auto">
                 <div className="w-full flex flex-row justify-between items-center mb-10">
+                    <Dropdown
+                        label="Region:"
+                        value={locale}
+                        onChange={handleLocaleChange}
+                        options={localesPairs}
+                    />
+
                     <RangeInput
                         label="Errors:"
                         value={errorsCount}
@@ -37,7 +39,7 @@ export function HomePage() {
 
                     <RandomizedInput
                         label="Seed:"
-                        value={debouncedSeed.toString()}
+                        value={seed.toString()}
                         onChange={handleSeedChange}
                         minValue={minSeed}
                         maxValue={maxSeed}

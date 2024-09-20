@@ -1,2 +1,2 @@
 export * from "./infiniteScroll";
-export * from "./pagination";
+export * from "./localization";

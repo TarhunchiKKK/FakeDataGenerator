@@ -4,12 +4,19 @@ import { PersonCreator } from "./utils/person-creator/person-creator";
 import { LocalesCodes } from "./enums/locales-codes.enum";
 import { Person } from "./entities/person.entity";
 import { PersonsDistorter } from "./utils/persons-distorter/persons-distorter";
+import { LocalePair } from "./entities/locale-pair.entity";
 
 @Injectable()
 export class PersonsService {
-    public generatePersons(seed: number, errorsPerRecord: number, count: number) {
+    public generatePersons(
+        seed: number,
+        errorsPerRecord: number,
+        count: number,
+        locale: LocalesCodes,
+    ) {
         faker.seed(seed);
-        const personsCreator = new PersonCreator(LocalesCodes.France, seed);
+
+        const personsCreator = new PersonCreator(locale, seed);
         const persons: Person[] = [];
 
         for (let i = 0; i < count; i++) {
@@ -19,5 +26,9 @@ export class PersonsService {
         }
 
         return persons;
+    }
+
+    public getLcales() {
+        return Object.entries(LocalesCodes).map(([title, code]) => new LocalePair(title, code));
     }
 }

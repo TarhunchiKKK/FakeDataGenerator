@@ -1,4 +1,4 @@
-import { IPerson } from "../../interfaces";
+import { IPerson } from "../../types";
 
 export interface IPersonsTableProps {
     persons: IPerson[];
