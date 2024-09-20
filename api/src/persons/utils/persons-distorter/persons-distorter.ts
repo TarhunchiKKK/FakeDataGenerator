@@ -3,6 +3,7 @@ import { Person } from "../../entities/person.entity";
 import { PersonFields } from "./constants/person-fields";
 import { ErrorTypes } from "./enums/error-types.enum";
 import { DistortionFunctions } from "./constants/distortion-functions";
+import { PersonFieldMinLength } from "./constants/person-field-min-length";
 
 export class PersonsDistorter {
     private static determineErrorsCount(errorsPerRecord: number): number {
@@ -28,6 +29,11 @@ export class PersonsDistorter {
 
     private static distortPersonOnce(person: Person) {
         const distortionField = this.getDistortionField();
+
+        if (person[distortionField].length < PersonFieldMinLength) {
+            return;
+        }
+
         const distortionIndex = this.getDistortionIndex(person[distortionField]);
         const errorType = this.getErrorType();
         const distortFunction = DistortionFunctions[errorType];

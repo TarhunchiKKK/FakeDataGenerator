@@ -1,39 +1,49 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { IPerson } from "../../../interfaces";
-import { TGetPersonsQueryArgs, TGetPersonsResponse } from "../types";
+import { TGetPersonsResponse } from "../types";
+import { useHaveChanged } from "../../../helpers";
+import { initialPersonsPerPage, personsPerPage } from "../constants";
 
-export function useGetPersons(queryArgs: TGetPersonsQueryArgs) {
+export function useGetPersons(seed: number, errorsCount: number) {
     const [persons, setPersons] = useState<IPerson[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isError, setIsError] = useState<boolean>(false);
+    const [page, setPage] = useState<number>(0);
+
+    const haveSeedChanged = useHaveChanged(seed);
+    const haveErrorsCountChanged = useHaveChanged(errorsCount);
+    const haveControlsChange = haveSeedChanged || haveErrorsCountChanged;
 
     useEffect(() => {
         async function fetchPersons() {
             try {
-                setIsError(false);
-                setIsLoading(true);
+                const count = page === 0 ? initialPersonsPerPage : personsPerPage;
 
                 const response = await axios.get<void, TGetPersonsResponse>(
                     `${import.meta.env.VITE_SERVER_URL}/persons`,
                     {
                         params: {
-                            seed: queryArgs.seed,
-                            errors: queryArgs.errorsCount,
+                            seed: seed + page,
+                            errors: errorsCount,
+                            count: count,
                         },
                     },
                 );
 
-                setPersons(response.data);
-            } catch (_: unknown) {
-                setIsError(true);
-            } finally {
-                setIsLoading(false);
+                setPersons((prevPersons) => [...prevPersons, ...response.data]);
+            } catch (error: unknown) {
+                console.log(error);
             }
         }
+        if (haveControlsChange) {
+            setPersons([]);
+            setPage(0);
+        } else {
+            fetchPersons();
+        }
+    }, [seed, errorsCount, page, haveControlsChange]);
 
-        fetchPersons();
-    }, [queryArgs.seed, queryArgs.errorsCount]);
-
-    return { persons, isLoading, isError };
+    return {
+        persons,
+        onScroll: () => setPage((prev) => prev + 1),
+    };
 }

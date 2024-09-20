@@ -1,40 +1,37 @@
 import { ChangeEvent, useState } from "react";
 import { IRangeInputProps } from "./props";
-import { numericSymbolsRegexp } from "../../constants";
+import { validateNumericString } from "../../../helpers";
 
-export function RangeInput({ value, onChange, minValue, maxValue }: IRangeInputProps) {
+export function RangeInput({ label, value, onChange, minValue, maxValue }: IRangeInputProps) {
     const [textInputValue, setTextInputValue] = useState<string>(value.toString());
 
-    const handleTextInputValueChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const targetValue = e.target.value ?? "0";
-        const numericValue = targetValue.replace(numericSymbolsRegexp, "");
-        const validatedValue = Math.min(+numericValue, maxValue);
-
-        onChange(validatedValue);
-        setTextInputValue(validatedValue.toString());
-    };
-
-    const handleRangeValueChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-
-        onChange(+value);
-        setTextInputValue(value);
+    const handleValueChanged = (e: ChangeEvent<HTMLInputElement>) => {
+        const validatedValue = validateNumericString(e.target.value ?? "0", {
+            minValue,
+            maxValue,
+        });
+        onChange(+validatedValue);
+        setTextInputValue(validatedValue);
     };
 
     return (
-        <div className="flex flex-row gap-3">
+        <div className="flex flex-row items-center gap-3">
+            <label>{label}</label>
+
             <input
                 type="range"
                 min={minValue}
                 max={maxValue}
                 value={value}
-                onChange={handleRangeValueChange}
+                onChange={handleValueChanged}
             />
+
             <input
-                type="text"
-                className="border-2 border-slate-600 outline-none rounded-md max-w-20"
+                className="px-2 border-2 border-slate-600 outline-none rounded-md max-w-20"
+                type="number"
+                step={0.5}
                 value={textInputValue}
-                onChange={handleTextInputValueChange}
+                onChange={handleValueChanged}
             />
         </div>
     );

@@ -7,15 +7,17 @@ import { PersonsDistorter } from "./utils/persons-distorter/persons-distorter";
 
 @Injectable()
 export class PersonsService {
-    public generatePersons(seed: number, errorsPerRecord: number) {
+    public generatePersons(seed: number, errorsPerRecord: number, count: number) {
         faker.seed(seed);
         const personsCreator = new PersonCreator(LocalesCodes.France, seed);
         const persons: Person[] = [];
-        for (let i = 0; i < 3; i++) {
+
+        for (let i = 0; i < count; i++) {
             const person = personsCreator.createPerson();
             PersonsDistorter.distortPerson(person, errorsPerRecord);
             persons.push(person);
         }
+
         return persons;
     }
 }
