@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from "@nestjs/common";
+import { Controller, Get, Query } from "@nestjs/common";
 import { PersonsService } from "./persons.service";
 
 @Controller("persons")
@@ -12,5 +12,10 @@ export class PersonsController {
         @Query("count") count: number,
     ) {
         return this.personsService.generatePersons(+seed, +errorsCount, +count);
+    }
+
+    @Get("/localizations")
+    public getLocalizations() {
+        return this.personsService.getLcales();
     }
 }

@@ -4,6 +4,7 @@ import { PersonCreator } from "./utils/person-creator/person-creator";
 import { LocalesCodes } from "./enums/locales-codes.enum";
 import { Person } from "./entities/person.entity";
 import { PersonsDistorter } from "./utils/persons-distorter/persons-distorter";
+import { LocalePair } from "./entities/locale-pair.entity";
 
 @Injectable()
 export class PersonsService {
@@ -19,5 +20,15 @@ export class PersonsService {
         }
 
         return persons;
+    }
+
+    public getLcales() {
+        // const localePairs: LocalePair[] = [];
+        // Object.entries(LocalesCodes).forEach(([title, code]) => {
+        //     localePairs.push({ title, code });
+        // });
+
+        return Object.entries(LocalesCodes).map(([title, code]) => new LocalePair(title, code));
+        // return localePairs;
     }
 }
