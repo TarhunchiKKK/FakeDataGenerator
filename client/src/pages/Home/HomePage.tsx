@@ -9,9 +9,15 @@ import { useControls } from "./hooks";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 export function HomePage() {
-    const { errorsCount, handleErrorsCountChange, seed, handleSeedChange } = useControls();
+    const {
+        errorsCount,
+        debouncedErrorsCount,
+        handleErrorsCountChange,
+        debouncedSeed,
+        handleSeedChange,
+    } = useControls();
 
-    const { persons, onScroll } = personsApi.useGetPersons(seed, errorsCount);
+    const { persons, onScroll } = personsApi.useGetPersons(debouncedSeed, debouncedErrorsCount);
 
     const renderPerson = (person: IPerson, index: number) => (
         <PersonTableRow key={person.id} person={person} sequenceNumber={index + 1} />
@@ -31,7 +37,7 @@ export function HomePage() {
 
                     <RandomizedInput
                         label="Seed:"
-                        value={seed.toString()}
+                        value={debouncedSeed.toString()}
                         onChange={handleSeedChange}
                         minValue={minSeed}
                         maxValue={maxSeed}

@@ -18,9 +18,11 @@ export function useControls() {
     };
 
     return {
-        errorsCount: debouncedErrorsCount,
+        errorsCount,
+        debouncedErrorsCount,
         handleErrorsCountChange,
-        seed: debouncedSeed,
+        seed,
+        debouncedSeed,
         handleSeedChange,
     };
 }
