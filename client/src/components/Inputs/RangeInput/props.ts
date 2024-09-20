@@ -8,4 +8,8 @@ export interface IRangeInputProps {
     minValue: number;
 
     maxValue: number;
+
+    minRangeValue: number;
+
+    maxRangeValue: number;
 }

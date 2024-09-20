@@ -2,7 +2,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { personsApi } from "../../api";
 import { maxErrorsCount, maxSeed, minErrorsCount, minSeed } from "../../constants";
 import { generateSeed } from "../../helpers";
-import { scrollThreshold } from "./constants";
+import { maxRangeErrorsCount, minRangeErrorsCount, scrollThreshold } from "./constants";
 import { renderPerson } from "./helpers";
 import { useErrorsCountControl, useLocaleControl, useSeedControl } from "./hooks";
 import {
@@ -48,6 +48,8 @@ export function HomePage() {
                         onChange={handleErrorsCountChange}
                         minValue={minErrorsCount}
                         maxValue={maxErrorsCount}
+                        minRangeValue={minRangeErrorsCount}
+                        maxRangeValue={maxRangeErrorsCount}
                     />
 
                     <RandomizedInput
@@ -62,7 +64,7 @@ export function HomePage() {
                     <Button content="Save" onClick={handleCreateCSV} isLoading={isCSVLoading} />
                 </div>
 
-                {persons.length && (
+                {persons.length !== 0 && (
                     <InfiniteScroll
                         dataLength={persons.length}
                         next={onScroll}
