@@ -3,6 +3,8 @@ import { LocalesCodes } from "../../enums/locales-codes.enum";
 import { Person } from "../../entities/person.entity";
 import { LocalesFakersMap } from "./constants/locales-fakers-map";
 import { PersonIdLength } from "./constants/person-id-length";
+import { AddressTypes } from "./enums/address-types.enum";
+import { AddressCreators } from "./constants/address-creators";
 
 export class PersonCreator {
     private faker: Faker;
@@ -25,10 +27,9 @@ export class PersonCreator {
     }
 
     private createAddress() {
-        const city = this.faker.location.city();
-        const street = this.faker.location.street();
-        const buildingNumber = this.faker.location.buildingNumber();
-        return [city, street, buildingNumber].join(", ");
+        const addressType = this.faker.helpers.enumValue(AddressTypes);
+        const addressCreator = AddressCreators[addressType];
+        return addressCreator(this.faker);
     }
 
     public createPerson(): Person {
