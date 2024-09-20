@@ -32,9 +32,9 @@ export function HomePage() {
     };
 
     return (
-        <main className="py-4 px-4 md:px-0">
+        <main className="py-4 px-2 lg:px-0">
             <div className="container mx-auto">
-                <div className="w-full flex flex-row justify-between items-center mb-10">
+                <div className="w-full flex flex-row justify-between items-center gap-6 mb-10 pb-4 overflow-x-scroll">
                     <Dropdown
                         label="Region:"
                         value={locale}

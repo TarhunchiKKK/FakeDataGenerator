@@ -30,7 +30,7 @@ export function RandomizedInput({
     };
 
     return (
-        <div className="flex flex-row items-center gap-3">
+        <div className="flex flex-row items-center gap-2">
             <label>{label}</label>
 
             <input
