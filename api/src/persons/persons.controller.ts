@@ -1,6 +1,7 @@
-import { Controller, Get, Query } from "@nestjs/common";
+import { Body, Controller, Get, Post, Query } from "@nestjs/common";
 import { PersonsService } from "./persons.service";
 import { LocalesCodes } from "./enums/locales-codes.enum";
+import { Person } from "./entities/person.entity";
 
 @Controller("persons")
 export class PersonsController {
@@ -19,5 +20,10 @@ export class PersonsController {
     @Get("/localizations")
     public getLocalizations() {
         return this.personsService.getLcales();
+    }
+
+    @Post("/csv")
+    public generateCSV(@Body() persons: Person[]) {
+        return this.personsService.generateCSV(persons);
     }
 }
