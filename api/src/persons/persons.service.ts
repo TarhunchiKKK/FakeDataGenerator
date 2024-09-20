@@ -10,6 +10,7 @@ import { LocalePair } from "./entities/locale-pair.entity";
 export class PersonsService {
     public generatePersons(seed: number, errorsPerRecord: number, count: number) {
         faker.seed(seed);
+
         const personsCreator = new PersonCreator(LocalesCodes.France, seed);
         const persons: Person[] = [];
 
@@ -23,12 +24,6 @@ export class PersonsService {
     }
 
     public getLcales() {
-        // const localePairs: LocalePair[] = [];
-        // Object.entries(LocalesCodes).forEach(([title, code]) => {
-        //     localePairs.push({ title, code });
-        // });
-
         return Object.entries(LocalesCodes).map(([title, code]) => new LocalePair(title, code));
-        // return localePairs;
     }
 }

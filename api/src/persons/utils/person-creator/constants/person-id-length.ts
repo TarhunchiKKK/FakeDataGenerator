@@ -1,1 +1,1 @@
-export const PERSON_ID_LENGTH = 30;
+export const PersonIdLength = 30;

@@ -15,7 +15,13 @@ export class PersonsDistorter {
         return Math.floor(errorsPerRecord) + additionalErrorsCount;
     }
 
-    private static getErrorType(): ErrorTypes {
+    private static getErrorType(source: string): ErrorTypes {
+        if (source.length <= PersonFieldMinLength) {
+            return faker.helpers.arrayElement([
+                ErrorTypes.AddSymbolError,
+                ErrorTypes.SwapSymbolsError,
+            ]);
+        }
         return faker.helpers.enumValue(ErrorTypes);
     }
 
@@ -30,12 +36,12 @@ export class PersonsDistorter {
     private static distortPersonOnce(person: Person) {
         const distortionField = this.getDistortionField();
 
-        if (person[distortionField].length < PersonFieldMinLength) {
-            return;
-        }
+        // if (person[distortionField].length < PersonFieldMinLength) {
+        //     return;
+        // }
 
         const distortionIndex = this.getDistortionIndex(person[distortionField]);
-        const errorType = this.getErrorType();
+        const errorType = this.getErrorType(person[distortionField]);
         const distortFunction = DistortionFunctions[errorType];
         person[distortionField] = distortFunction(person[distortionField], distortionIndex);
     }

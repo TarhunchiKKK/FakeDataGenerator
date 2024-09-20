@@ -2,7 +2,7 @@ import { Faker } from "@faker-js/faker";
 import { LocalesCodes } from "../../enums/locales-codes.enum";
 import { Person } from "../../entities/person.entity";
 import { LocalesFakersMap } from "./constants/locales-fakers-map";
-import { PERSON_ID_LENGTH } from "./constants/person-id-length";
+import { PersonIdLength } from "./constants/person-id-length";
 
 export class PersonCreator {
     private faker: Faker;
@@ -13,7 +13,7 @@ export class PersonCreator {
     }
 
     private createId(): string {
-        return this.faker.string.alphanumeric({ length: PERSON_ID_LENGTH });
+        return this.faker.string.alphanumeric({ length: PersonIdLength });
     }
 
     private createName(): string {
