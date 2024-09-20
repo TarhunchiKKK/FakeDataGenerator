@@ -1,13 +1,22 @@
+import InfiniteScroll from "react-infinite-scroll-component";
 import { personsApi } from "../../api";
-import { RangeInput, RandomizedInput, Dropdown, Loader, PersonsTable } from "../../components";
 import { maxErrorsCount, maxSeed, minErrorsCount, minSeed } from "../../constants";
 import { generateSeed } from "../../helpers";
 import { scrollThreshold } from "./constants";
 import { renderPerson } from "./helpers";
 import { useErrorsCountControl, useLocaleControl, useSeedControl } from "./hooks";
-import InfiniteScroll from "react-infinite-scroll-component";
+import {
+    RangeInput,
+    RandomizedInput,
+    Dropdown,
+    Loader,
+    PersonsTable,
+    Button,
+} from "../../components";
 
 export function HomePage() {
+    const { isCSVLoading, createCSV } = personsApi.useCreateCSV();
+
     const { seed, debouncedSeed, handleSeedChange } = useSeedControl();
     const { errorsCount, debouncedErrorsCount, handleErrorsCountChange } = useErrorsCountControl();
     const { locale, debouncedLocale, handleLocaleChange, localesPairs } = useLocaleControl();
@@ -18,10 +27,14 @@ export function HomePage() {
         debouncedLocale,
     );
 
+    const handleCreateCSV = async () => {
+        createCSV(persons);
+    };
+
     return (
-        <main className="py-4 px-4 md:px-0">
+        <main className="py-4 px-2 lg:px-0">
             <div className="container mx-auto">
-                <div className="w-full flex flex-row justify-between items-center mb-10">
+                <div className="w-full flex flex-row justify-between items-center gap-6 mb-10 pb-4 overflow-x-scroll">
                     <Dropdown
                         label="Region:"
                         value={locale}
@@ -45,6 +58,8 @@ export function HomePage() {
                         maxValue={maxSeed}
                         ganerateValue={generateSeed}
                     />
+
+                    <Button content="Save" onClick={handleCreateCSV} isLoading={isCSVLoading} />
                 </div>
 
                 {persons.length && (

@@ -7,7 +7,7 @@ export function Dropdown({ label, value, onChange, options }: IDropdownProps) {
     };
 
     return (
-        <div className="flex flex-row items-center gap-3">
+        <div className="flex flex-row items-center gap-2">
             <label>{label}</label>
 
             <select

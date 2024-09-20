@@ -17,9 +17,7 @@ export class PersonCreator {
     }
 
     private createName(): string {
-        const firstName = this.faker.person.firstName();
-        const lastName = this.faker.person.lastName();
-        return `${firstName} ${lastName}`;
+        return this.faker.person.fullName();
     }
 
     private createPhone(): string {
@@ -27,11 +25,10 @@ export class PersonCreator {
     }
 
     private createAddress() {
-        const country = this.faker.location.country();
         const city = this.faker.location.city();
         const street = this.faker.location.street();
         const buildingNumber = this.faker.location.buildingNumber();
-        return [country, city, street, buildingNumber].join(", ");
+        return [city, street, buildingNumber].join(", ");
     }
 
     public createPerson(): Person {
