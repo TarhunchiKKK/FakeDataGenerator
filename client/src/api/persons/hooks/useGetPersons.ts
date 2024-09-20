@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { IPerson } from "../../../interfaces";
-import { TGetPersonsQueryArgs, TGetPersonsResponse } from "../types";
+import { TGetPersonsResponse } from "../types";
 import { useHaveChanged } from "../../../helpers";
+import { initialPersonsPerPage, personsPerPage } from "../constants";
 
-export function useGetPersons({ seed, count, errorsCount }: TGetPersonsQueryArgs) {
+export function useGetPersons(seed: number, errorsCount: number) {
     const [persons, setPersons] = useState<IPerson[]>([]);
     const [page, setPage] = useState<number>(0);
 
     const haveSeedChanged = useHaveChanged(seed);
     const haveErrorsCountChanged = useHaveChanged(errorsCount);
+    const haveControlsChange = haveSeedChanged || haveErrorsCountChanged;
 
     useEffect(() => {
         async function fetchPersons() {
             try {
+                const count = page === 0 ? initialPersonsPerPage : personsPerPage;
+
                 const response = await axios.get<void, TGetPersonsResponse>(
                     `${import.meta.env.VITE_SERVER_URL}/persons`,
                     {
@@ -25,18 +29,18 @@ export function useGetPersons({ seed, count, errorsCount }: TGetPersonsQueryArgs
                     },
                 );
 
-                if (haveSeedChanged || haveErrorsCountChanged) {
-                    setPersons(response.data);
-                } else {
-                    setPersons((prevPersons) => [...prevPersons, ...response.data]);
-                }
+                setPersons((prevPersons) => [...prevPersons, ...response.data]);
             } catch (error: unknown) {
                 console.log(error);
             }
         }
-
-        fetchPersons();
-    }, [seed, errorsCount, count, page, haveSeedChanged, haveErrorsCountChanged]);
+        if (haveControlsChange) {
+            setPersons([]);
+            setPage(0);
+        } else {
+            fetchPersons();
+        }
+    }, [seed, errorsCount, page, haveControlsChange]);
 
     return {
         persons,

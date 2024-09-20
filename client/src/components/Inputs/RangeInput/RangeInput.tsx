@@ -6,7 +6,6 @@ export function RangeInput({ label, value, onChange, minValue, maxValue }: IRang
     const [textInputValue, setTextInputValue] = useState<string>(value.toString());
 
     const handleValueChanged = (e: ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
         const validatedValue = validateNumericString(e.target.value ?? "0", {
             minValue,
             maxValue,

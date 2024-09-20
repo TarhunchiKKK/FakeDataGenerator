@@ -1,21 +1,17 @@
 import { personsApi } from "../../api";
-import { PersonsTable, PersonTableRow } from "../../components";
+import { Loader, PersonsTable, PersonTableRow } from "../../components";
 import { RangeInput, RandomizedInput } from "../../components";
 import { maxErrorsCount, maxSeed, minErrorsCount, minSeed } from "../../constants";
 import { generateSeed } from "../../helpers";
 import { IPerson } from "../../interfaces";
-import { personsPerPage, scrollThreshold } from "./constants";
+import { scrollThreshold } from "./constants";
 import { useControls } from "./hooks";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 export function HomePage() {
     const { errorsCount, handleErrorsCountChange, seed, handleSeedChange } = useControls();
 
-    const { persons, onScroll } = personsApi.useGetPersons({
-        seed,
-        errorsCount,
-        count: personsPerPage,
-    });
+    const { persons, onScroll } = personsApi.useGetPersons(seed, errorsCount);
 
     const renderPerson = (person: IPerson, index: number) => (
         <PersonTableRow key={person.id} person={person} sequenceNumber={index + 1} />
@@ -48,7 +44,11 @@ export function HomePage() {
                         dataLength={persons.length}
                         next={onScroll}
                         hasMore={true}
-                        loader={<p>Loading...</p>}
+                        loader={
+                            <div className="w-min mx-auto my-4">
+                                <Loader />
+                            </div>
+                        }
                         scrollThreshold={scrollThreshold}
                     >
                         <PersonsTable persons={persons} renderPerson={renderPerson} />

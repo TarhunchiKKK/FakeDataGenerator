@@ -1,15 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 export function useHaveChanged<Type>(value: Type): boolean {
-    const previousStateRef = useRef<Type>(value);
-    const [haveChanged, setHaveChanged] = useState<boolean>(false);
+    const [prevValue, setPrevValue] = useState<Type>(value);
 
     useEffect(() => {
-        if (previousStateRef.current !== value) {
-            setHaveChanged(true);
-        }
-        previousStateRef.current = value;
+        setPrevValue(value);
     }, [value]);
 
-    return haveChanged;
+    return prevValue !== value;
 }
